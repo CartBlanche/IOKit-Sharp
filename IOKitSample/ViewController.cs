@@ -20,25 +20,31 @@ namespace IOKit.IOKitSample
         {
             base.ViewDidLoad ();
 
+            // TODO serialDeviceManager.Filter = (x => x.VendorID == 1155 && x.ProductID == 22336);
+
             // Do any additional setup after loading the view.
             serialDeviceManager.OnDeviceAdded += (o, e) => {
-                lblStatus.StringValue = "Added " + Environment.NewLine + e.Device.ToString ();
+                MainThread.BeginInvokeOnMainThread (() => {
+                    lblStatus.StringValue = "Added " + Environment.NewLine + e.Device.ToString ();
 
-                // List our attached devices
-                lblDevices.StringValue = string.Join (
-                        Environment.NewLine,
-                        serialDeviceManager.DeviceList.Select (pair => pair.Key.ToString ()).ToArray ()
-                    );
+                    // List our attached devices
+                    lblDevices.StringValue = string.Join (
+                            Environment.NewLine,
+                            serialDeviceManager.DeviceList.Select (pair => pair.Key.ToString ()).ToArray ()
+                        );
+                });
             };
 
             serialDeviceManager.OnDeviceRemoved += (o, e) => {
-                lblStatus.StringValue = "Removed " + Environment.NewLine + e.Device.ToString ();
+                MainThread.BeginInvokeOnMainThread (() => {
+                    lblStatus.StringValue = "Removed " + Environment.NewLine + e.Device.ToString ();
 
-                // List any attached devices
-                lblDevices.StringValue = string.Join (
-                        Environment.NewLine,
-                        serialDeviceManager.DeviceList.Select (pair => pair.Key.ToString ()).ToArray ()
-                    );
+                    // List any attached devices
+                    lblDevices.StringValue = string.Join (
+                            Environment.NewLine,
+                            serialDeviceManager.DeviceList.Select (pair => pair.Key.ToString ()).ToArray ()
+                        );
+                });
             };
 
             var t = Task.Run (() => {
