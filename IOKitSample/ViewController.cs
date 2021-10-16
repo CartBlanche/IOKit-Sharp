@@ -47,7 +47,7 @@ namespace IOKit.IOKitSample
                 });
             };
 
-            var t = Task.Run (() => {
+            var serial = Task.Run (() => {
                 serialDeviceManager.Start ();
             });
         }
