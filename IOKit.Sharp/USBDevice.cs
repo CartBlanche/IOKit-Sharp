@@ -1,4 +1,6 @@
-﻿namespace IOKit.Sharp
+﻿using System;
+
+namespace IOKit.Sharp
 {
     public class USBDevice : BaseDevice
     {

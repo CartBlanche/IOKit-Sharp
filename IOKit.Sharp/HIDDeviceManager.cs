@@ -7,18 +7,25 @@ namespace IOKit.Sharp
 {
     public class HIDDeviceManager : BaseDeviceManager
     {
+        #region Device Callbacks
+        public override void DoDeviceAdded (IntPtr p, uint addedIterator)
+        {
+            // TODO YOUR PR Here :)
+            throw new NotImplementedException ();
+        }
+
+        public override void DoDeviceRemoved (IntPtr p, uint removedIterator)
+        {
+            // TODO YOUR PR Here :)
+            throw new NotImplementedException ();
+        }
+        #endregion
+
+        #region Let's Start Listening for HID Devices
         public override void Start ()
         {
-            // TODO : Your PR here
+            Start (/* TODO YOUR PR Here  :)*/ string.Empty);
         }
-
-        void DoHIDDeviceAdded (IntPtr p, uint addedIterator)
-        {
-
-        }
-
-        void DoHIDeviceRemoved (IntPtr p, uint removedIterator)
-        {
-        }
+        #endregion
     }
 }

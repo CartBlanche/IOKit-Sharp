@@ -5,7 +5,7 @@ namespace IOKit.Sharp
     public class SerialDevice : BaseDevice
     {
         #region Serial Properties
-        public string Path { //DialInDevice
+        public string Port { //DialInDevice
             get;
             set;
         }
@@ -46,12 +46,12 @@ namespace IOKit.Sharp
             return base.ToString () + string.Format (
                 "VendorName:\t\t\t{0}" + Environment.NewLine +
                 "SerialNo:\t\t\t\t{1}" + Environment.NewLine +
-                "DialinDevice:\t\t\t{2}" + Environment.NewLine +
+                "Port:\t\t\t{2}" + Environment.NewLine + // DialinDevice
                 "SerialBSDClientType:\t{3}" + Environment.NewLine +
                 "TTYBaseName:\t\t{4}" + Environment.NewLine +
                 "TTYDevice:\t\t\t{5}" + Environment.NewLine +
                 "TTYSuffix:\t\t\t{6}" + Environment.NewLine,
-                VendorName, SerialNo, Path, SerialBSDClientType, TTYBaseName, TTYDevice, TTYSuffix);
+                VendorName, SerialNo, Port, SerialBSDClientType, TTYBaseName, TTYDevice, TTYSuffix);
         }
     }
 }

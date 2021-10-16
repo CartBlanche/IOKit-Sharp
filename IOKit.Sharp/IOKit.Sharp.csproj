@@ -68,13 +68,15 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
     <Reference Include="OpenTK" />
-    <Compile Include="USBDeviceManager.cs"/>
-    <Compile Include="HIDDeviceManager.cs"/>
-    <Compile Include="BaseDevice.cs"/>
-    <Compile Include="BaseDeviceManager.cs"/>
-    <Compile Include="DeviceArgs.cs"/>
-    <Compile Include="IOKit.cs"/>
-    <Compile Include="SerialDevice.cs"/>
-    <Compile Include="SerialDeviceManager.cs"/>
+    <Compile Include="USBDeviceManager.cs" />
+    <Compile Include="HIDDeviceManager.cs" />
+    <Compile Include="BaseDevice.cs" />
+    <Compile Include="BaseDeviceManager.cs" />
+    <Compile Include="DeviceArgs.cs" />
+    <Compile Include="IOKit.cs" />
+    <Compile Include="SerialDevice.cs" />
+    <Compile Include="SerialDeviceManager.cs" />
+    <Compile Include="HIDDevice.cs"/>
+    <Compile Include="USBDevice.cs"/>
   </ItemGroup>
 </Project>
