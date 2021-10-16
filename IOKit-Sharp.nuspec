@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.0.01-alpha</version>
+    <authors>Dominique Louis</authors>
+    <owners>Aldoma Solutions</owners>
+    <licenseUrl>https://github.com/CartBlanche/IOKit-Sharp/blob/main/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/CartBlanche/IOKit-Sharp</projectUrl>
+    <iconUrl>https://avatars1.githubusercontent.com/u/6338296</iconUrl>
+    <id>AldomaSolutions.IOKit-Sharp</id>
+    <title>Aldoma Solutions IOKit-Sharp</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Easily communicate with IO devices from your MacOS application, using .NET</description>
+    <summary>Communicating with IO devices on MacOS can be a pain. This nuget contains the bindings to IOKit so should simplify getting up and running.
+    </summary>
+    <releaseNotes>
+Add support for Versioning the Mac Packages
+    </releaseNotes>
+    <copyright>Copyright Aldoma Solutions © 2021</copyright>
+  </metadata>
+  <files>
+    <file src="bin/Release/**/*.dll" target="build" />
+    <file src="bin/Release/**/*.dll.config" target="build" />
+    <file src="bin/Release/**/*.dylib" target="build" />
+    <file src="bin/Release/**/*.targets" target="build" />
+    <file src="bin/Release/**/*.exe" target="tools" />
+    <file src="bin/Release/**/*.dylib" target="tools" />
+    <file src="bin/Release/README.txt" target="build" />
+  </files>
+</package>

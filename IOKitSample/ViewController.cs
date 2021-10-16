@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppKit;
 using Foundation;
+using IOKit.Sharp;
 using Xamarin.Essentials;
 
 namespace IOKit.IOKitSample
 {
     public partial class ViewController : NSViewController
     {
-        Dictionary<string, MeadowDevice> deviceList = new Dictionary<string, MeadowDevice>();
+        SerialDeviceManager serialDeviceManager = new SerialDeviceManager ();
         public ViewController (IntPtr handle) : base (handle)
         {
         }
@@ -20,37 +21,29 @@ namespace IOKit.IOKitSample
             base.ViewDidLoad ();
 
             // Do any additional setup after loading the view.
-
-            IOKit.OnDeviceAdded += (o, e) => {
+            serialDeviceManager.OnDeviceAdded += (o, e) => {
                 lblStatus.StringValue = "Added " + Environment.NewLine + e.Device.ToString ();
-
-                // Add the device in. If it already exists it should just be replaced.
-                deviceList[e.Device.TTYDevice] = e.Device;
 
                 // List our attached devices
                 lblDevices.StringValue = string.Join (
                         Environment.NewLine,
-                        deviceList.Select (pair => pair.Key.ToString ()).ToArray ()
+                        serialDeviceManager.DeviceList.Select (pair => pair.Key.ToString ()).ToArray ()
                     );
             };
 
-            IOKit.OnDeviceRemoved += (o, e) => {
+            serialDeviceManager.OnDeviceRemoved += (o, e) => {
                 lblStatus.StringValue = "Removed " + Environment.NewLine + e.Device.ToString ();
-
-                // Remove the device from the list
-                deviceList.Remove (e.Device.TTYDevice);
 
                 // List any attached devices
                 lblDevices.StringValue = string.Join (
                         Environment.NewLine,
-                        deviceList.Select (pair => pair.Key.ToString ()).ToArray ()
+                        serialDeviceManager.DeviceList.Select (pair => pair.Key.ToString ()).ToArray ()
                     );
             };
 
             var t = Task.Run (() => {
-                IOKit.InitialiseSerialUSB ();
+                serialDeviceManager.Start ();
             });
-            //t.Wait ();
         }
 
         public override NSObject RepresentedObject {
