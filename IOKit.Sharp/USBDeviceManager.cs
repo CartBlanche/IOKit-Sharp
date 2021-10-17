@@ -20,11 +20,11 @@ namespace IOKit.Sharp
                 if (addedEvent != null) {
                     // TODO Populate our USB Device Correctly Here
                     var device = new USBDevice {
-                        Name = "/*TODO */",
+                        ProductName = "/*TODO */",
                     };
 
                     // Add the device in. If it already exists it should just be replaced.
-                    deviceList[device.Name] = device;
+                    deviceList[device.ProductName] = device;
                     addedEvent (null, new DeviceArgs (device));
                 }
 
@@ -48,11 +48,11 @@ namespace IOKit.Sharp
                 if (removedEvent != null) {
                     // TODO Populate our USB Device Correctly Here
                     var device = new USBDevice {
-                        Name = "/* TODO */",
+                        ProductName = "/* TODO */",
                     };
 
                     // Add the device in. If it already exists it should just be replaced.
-                    deviceList[device.Name] = device;
+                    deviceList[device.ProductName] = device;
                     removedEvent (null, new DeviceArgs (device));
                 }
 

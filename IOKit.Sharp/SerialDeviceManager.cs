@@ -59,7 +59,7 @@ namespace IOKit.Sharp
 						TTYDevice = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYDeviceKey),
 						TTYSuffix = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYSuffixKey),
 						VendorName = vendor,
-						Name = product,
+						ProductName = product,
 						SerialNo = serialNumber,
 					};
 
@@ -128,7 +128,7 @@ namespace IOKit.Sharp
 						TTYDevice = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYDeviceKey),
 						TTYSuffix = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYSuffixKey),
 						VendorName = vendor,
-						Name = product,
+						ProductName = product,
 						SerialNo = serialNumber,
 					};
 					// Remove the device from the list

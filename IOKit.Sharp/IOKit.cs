@@ -10,56 +10,57 @@ namespace IOKit
 		#region DllImports
 		// This is based off of Chris Hamons' gist https://gist.github.com/chamons/82ab06f5e83d2cb10193 but with a bit more functionality
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		// Please add DllImport in alphabetical order
+		[DllImport (iOKitPath)]
 		public static extern IntPtr CFUUIDGetConstantUUIDWithBytes (IntPtr alloc, byte byte0, byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8, byte byte9, byte byte10, byte byte11, byte byte12, byte byte13, byte byte14, byte byte15);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IOCreatePlugInInterfaceForService (uint device, IntPtr pluginType, IntPtr interfaceType, IntPtr theInterface, ref int theScore);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern uint IOIteratorNext (uint iterator);
 
 		[Obsolete ("IOMasterPort has been Deprecated by Apple and is most cases is no longer needed.")]
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IOMasterPort (uint masterPort, ref uint matching);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern IntPtr IONotificationPortCreate (uint port);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern IntPtr IONotificationPortGetRunLoopSource (IntPtr notify);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern void IONotificationPortSetDispatchQueue (IntPtr gNotifyPort, IntPtr dispatchQueue);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IOObjectRelease (uint device);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IORegistryEntryCreateCFProperties (uint device, IntPtr properties, IntPtr allocator, uint options);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern IntPtr IORegistryEntryCreateCFProperty (uint device, IntPtr key, IntPtr allocator, uint options);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IORegistryEntryGetName (uint device, ref char name);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IORegistryEntryGetParentEntry (uint device, string name, ref uint parent);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IORegistryEntryGetRegistryEntryID (uint device, ref uint deviceID);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern IntPtr IORegistryEntrySearchCFProperty (uint device, string plane, IntPtr key, IntPtr allocator, uint options);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern uint IOServiceGetMatchingService (uint masterPort, IntPtr matching);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern uint IOServiceGetMatchingServices (uint masterPort, IntPtr matching, ref uint iterator);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern int IOServiceAddMatchingNotification (
 			IntPtr notifyPort,
 			string notificationType,
@@ -68,11 +69,13 @@ namespace IOKit
 			IntPtr refCon,
 			ref uint notification);
 
-		[DllImport ("/System/Library/Frameworks/IOKit.framework/IOKit")]
+		[DllImport (iOKitPath)]
 		public static extern IntPtr IOServiceMatching (string name);
 		#endregion
 
 		#region IOKit Contants to match the Objective C/Swift constants
+		public const string iOKitPath = "/System/Library/Frameworks/IOKit.framework/IOKit";
+
 		public const int kIOReturnSuccess = 0;
 
 		#region From IOKitKeys.h

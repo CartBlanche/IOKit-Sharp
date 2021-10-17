@@ -46,6 +46,9 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="System.IO.Ports" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\LICENSE" PackagePath="" Pack="true" />
     <Compile Include="**\*.shared.cs" />
     <Compile Include="**\*.shared.*.cs" />
@@ -76,7 +79,10 @@
     <Compile Include="IOKit.cs" />
     <Compile Include="SerialDevice.cs" />
     <Compile Include="SerialDeviceManager.cs" />
-    <Compile Include="HIDDevice.cs"/>
-    <Compile Include="USBDevice.cs"/>
+    <Compile Include="HIDDevice.cs" />
+    <Compile Include="USBDevice.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="5.0.1" />
   </ItemGroup>
 </Project>
