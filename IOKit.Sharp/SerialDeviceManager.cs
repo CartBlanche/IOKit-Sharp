@@ -5,151 +5,149 @@ using Foundation;
 
 namespace IOKit.Sharp
 {
-	public class SerialDeviceManager : BaseDeviceManager
-	{
-		#region Device Callbacks
-		public override void DoDeviceAdded (IntPtr p, uint addedIterator)
-		{
-			uint usbDevice = IOKit.IOIteratorNext (addedIterator);
+    public class SerialDeviceManager : BaseDeviceManager
+    {
+        #region Device Callbacks
+        public override void DoDeviceAdded (IntPtr p, uint addedIterator)
+        {
+            uint usbDevice = IOKit.IOIteratorNext (addedIterator);
 
-			while (usbDevice != 0) {
-				uint parent = 0;
-				uint parents = usbDevice;
-				var vendor = string.Empty;
-				var product = string.Empty;
-				var serialNumber = string.Empty;
+            while (usbDevice != 0) {
+                uint parent = 0;
+                uint parents = usbDevice;
+                var vendor = string.Empty;
+                var product = string.Empty;
+                var serialNumber = string.Empty;
+                uint vendorID = 0;
+                uint productID = 0;
 
-				while (IOKit.IORegistryEntryGetParentEntry (parents, IOKit.kIOServicePlane, ref parent) == IOKit.kIOReturnSuccess) {
-					vendor = IOKit.GetPropertyValue (parent, IOKit.kUSBVendorString);
-					if (!string.IsNullOrEmpty (vendor))
-						Debug.WriteLine ("Vendor ID: {0}", args: vendor);
+                GetParentProperties (usbDevice, ref parent, ref parents, ref vendor, ref product, ref serialNumber, ref vendorID, ref productID);
 
-					product = IOKit.GetPropertyValue (parent, IOKit.kUSBProductString);
-					if (!string.IsNullOrEmpty (product))
-						Debug.WriteLine ("Product ID: {0}", args: product);
+                var dialinDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIODialinDeviceKey);
 
-					serialNumber = IOKit.GetPropertyValue (parent, IOKit.kUSBSerialNumberString);
-					if (!string.IsNullOrEmpty (serialNumber))
-						Debug.WriteLine ("Serial No: {0}", args: serialNumber);
+                EventHandler<DeviceArgs> addedEvent = OnDeviceAdded;
+                // Fire off the Add event with the information we've gathered.
+                if (addedEvent != null) {
+                    var device = new SerialDevice {
+                        Port = dialinDevice,
+                        SerialBSDClientType = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOSerialBSDTypeKey),
+                        TTYBaseName = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYBaseNameKey),
+                        TTYDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYDeviceKey),
+                        TTYSuffix = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYSuffixKey),
+                        VendorName = vendor,
+                        ProductName = product,
+                        SerialNo = serialNumber,
+                        VendorID = vendorID,
+                        ProductID = productID,
+                    };
 
-					if (parents != usbDevice) {
-						if (IOKit.IOObjectRelease (parents) != 0) {
-							Debug.WriteLine ("Unable to release device: {0} ", parents);
-						}
-					}
+                    // Add the device in. If it already exists it should just be replaced.
+                    deviceList[device.TTYDevice] = device;
+                    addedEvent (null, new DeviceArgs (device));
+                }
 
-					if (!string.IsNullOrEmpty (vendor)
-						&& !string.IsNullOrEmpty (product)
-						&& !string.IsNullOrEmpty (serialNumber))
-						break;
+                if (IOKit.IOObjectRelease (usbDevice) != 0) {
+                    Debug.WriteLine ("Unable to release device: {0} ", usbDevice);
+                }
+                usbDevice = IOKit.IOIteratorNext (addedIterator);
+            };
+        }
 
-					parents = parent;
-				}
+        public override void DoDeviceRemoved (IntPtr p, uint removedIterator)
+        {
+            uint usbDevice = IOKit.IOIteratorNext (removedIterator);
 
-				var dialinDevice = IOKit.GetPropertyValue (usbDevice, IOKit.kIODialinDeviceKey);
+            while (usbDevice != 0) {
+                uint parent = 0;
+                uint parents = usbDevice;
+                var vendor = string.Empty;
+                var product = string.Empty;
+                var serialNumber = string.Empty;
+                uint vendorID = 0;
+                uint productID = 0;
 
-				// TODO if ((Array.IndexOf (invalidDeviceList, dialinDevice) == -1) && (Array.IndexOf (invalidDeviceList, product) == -1)) {
-				EventHandler<DeviceArgs> addedEvent = OnDeviceAdded;
-				// Fire off the Add event with the information we've gathered.
-				if (addedEvent != null) {
-					var device = new SerialDevice {
-						Port = dialinDevice,
-						SerialBSDClientType = IOKit.GetPropertyValue (usbDevice, IOKit.kIOSerialBSDTypeKey),
-						TTYBaseName = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYBaseNameKey),
-						TTYDevice = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYDeviceKey),
-						TTYSuffix = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYSuffixKey),
-						VendorName = vendor,
-						ProductName = product,
-						SerialNo = serialNumber,
-					};
+                GetParentProperties (usbDevice, ref parent, ref parents, ref vendor, ref product, ref serialNumber, ref vendorID, ref productID);
 
-					// Add the device in. If it already exists it should just be replaced.
-					deviceList[device.TTYDevice] = device;
-					addedEvent (null, new DeviceArgs (device));
-				}
-				// }
+                var dialinDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIODialinDeviceKey);
 
-				if (IOKit.IOObjectRelease (usbDevice) != 0) {
-					Debug.WriteLine ("Unable to release device: {0} ", usbDevice);
-				}
-				usbDevice = IOKit.IOIteratorNext (addedIterator);
-			};
-		}
+                EventHandler<DeviceArgs> removedEvent = OnDeviceRemoved;
+                // Fire off the Remove event with the information we've gathered.
+                if (removedEvent != null) {
+                    var device = new SerialDevice {
+                        Port = dialinDevice,
+                        SerialBSDClientType = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOSerialBSDTypeKey),
+                        TTYBaseName = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYBaseNameKey),
+                        TTYDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYDeviceKey),
+                        TTYSuffix = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYSuffixKey),
+                        VendorName = vendor,
+                        ProductName = product,
+                        SerialNo = serialNumber,
+                        VendorID = vendorID,
+                        ProductID = productID,
+                    };
 
-		public override void DoDeviceRemoved (IntPtr p, uint removedIterator)
-		{
-			uint usbDevice = IOKit.IOIteratorNext (removedIterator);
+                    // Remove the device from the list
+                    deviceList.Remove (device.TTYDevice);
+                    removedEvent (null, new DeviceArgs (device));
+                }
 
-			while (usbDevice != 0) {
-				uint parent = 0;
-				uint parents = usbDevice;
-				var vendor = string.Empty;
-				var product = string.Empty;
-				var serialNumber = string.Empty;
+                if (IOKit.IOObjectRelease (usbDevice) != 0) {
+                    Debug.WriteLine ("Unable to release device: {0} ", usbDevice);
+                }
+                usbDevice = IOKit.IOIteratorNext (removedIterator);
+            };
+        }
 
-				while (IOKit.IORegistryEntryGetParentEntry (parents, IOKit.kIOServicePlane, ref parent) == IOKit.kIOReturnSuccess) {
-					vendor = IOKit.GetPropertyValue (parent, IOKit.kUSBVendorString);
-					if (!string.IsNullOrEmpty (vendor))
-						Debug.WriteLine ("Vendor ID: {0}", args: vendor);
+        private static void GetParentProperties (uint usbDevice, ref uint parent, ref uint parents, ref string vendor, ref string product, ref string serialNumber, ref uint vendorID, ref uint productID)
+        {
+            while (IOKit.IORegistryEntryGetParentEntry (parents, IOKit.kIOServicePlane, ref parent) == IOKit.kIOReturnSuccess) {
+                vendor = IOKit.GetPropertyStringValue (parent, IOKit.kUSBVendorString);
+                if (!string.IsNullOrEmpty (vendor))
+                    Debug.WriteLine ("Vendor ID: {0}", args: vendor);
 
-					product = IOKit.GetPropertyValue (parent, IOKit.kUSBProductString);
-					if (!string.IsNullOrEmpty (product))
-						Debug.WriteLine ("Product ID: {0}", args: product);
+                product = IOKit.GetPropertyStringValue (parent, IOKit.kUSBProductString);
+                if (!string.IsNullOrEmpty (product))
+                    Debug.WriteLine ("Product ID: {0}", args: product);
 
-					serialNumber = IOKit.GetPropertyValue (parent, IOKit.kUSBSerialNumberString);
-					if (!string.IsNullOrEmpty (serialNumber))
-						Debug.WriteLine ("Serial No: {0}", args: serialNumber);
+                serialNumber = IOKit.GetPropertyStringValue (parent, IOKit.kUSBSerialNumberString);
+                if (!string.IsNullOrEmpty (serialNumber))
+                    Debug.WriteLine ("Serial No: {0}", args: serialNumber);
 
-					if (parents != usbDevice) {
-						if (IOKit.IOObjectRelease (parents) != 0) {
-							Debug.WriteLine ("Unable to release device: {0} ", parents);
-						}
-					}
+                if (parents != usbDevice) {
+                    if (IOKit.IOObjectRelease (parents) != 0) {
+                        Debug.WriteLine ("Unable to release device: {0} ", parents);
+                    }
+                }
 
-					if (!string.IsNullOrEmpty (vendor)
-						&& !string.IsNullOrEmpty (product)
-						&& !string.IsNullOrEmpty (serialNumber))
-						break;
+                vendorID = IOKit.GetPropertyUIntValue (parent, IOKit.kUSBVendorID);
+                if (vendorID == 0)
+                    Debug.WriteLine ("Vendor ID NOT found");
 
-					parents = parent;
-				}
+                productID = IOKit.GetPropertyUIntValue (parent, IOKit.kUSBProductID);
+                if (productID == 0)
+                    Debug.WriteLine ("Product ID NOT found");
 
-				var dialinDevice = IOKit.GetPropertyValue (usbDevice, IOKit.kIODialinDeviceKey);
+                if (parents != usbDevice) {
+                    if (IOKit.IOObjectRelease (parents) != 0) {
+                        Debug.WriteLine ("Unable to release device: {0} ", parents);
+                    }
+                }
 
-				// TODO if ((Array.IndexOf (invalidDeviceList, dialinDevice) == -1) && (Array.IndexOf (invalidDeviceList, product) == -1)) {
+                if (!string.IsNullOrEmpty (vendor)
+                    && !string.IsNullOrEmpty (product)
+                    && !string.IsNullOrEmpty (serialNumber))
+                    break;
 
-				EventHandler<DeviceArgs> removedEvent = OnDeviceRemoved;
-				// Fire off the Remove event with the information we've gathered.
-				if (removedEvent != null) {
-					var device = new SerialDevice {
-						Port = dialinDevice,
-						SerialBSDClientType = IOKit.GetPropertyValue (usbDevice, IOKit.kIOSerialBSDTypeKey),
-						TTYBaseName = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYBaseNameKey),
-						TTYDevice = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYDeviceKey),
-						TTYSuffix = IOKit.GetPropertyValue (usbDevice, IOKit.kIOTTYSuffixKey),
-						VendorName = vendor,
-						ProductName = product,
-						SerialNo = serialNumber,
-					};
-					// Remove the device from the list
-					deviceList.Remove (device.TTYDevice);
-					removedEvent (null, new DeviceArgs (device));
-				}
-				// }
+                parents = parent;
+            }
+        }
+        #endregion
 
-				if (IOKit.IOObjectRelease (usbDevice) != 0) {
-					Debug.WriteLine ("Unable to release device: {0} ", usbDevice);
-				}
-				usbDevice = IOKit.IOIteratorNext (removedIterator);
-			};
-		}
-		#endregion
-
-		#region Let's Start Listening for Devices
-		public override void Start ()
-		{
-			Start (IOKit.kIOSerialBSDServiceValue);
-		}
-		#endregion
-	}
+        #region Let's Start Listening for Serial Devices
+        public override void Start ()
+        {
+            Start (IOKit.kIOSerialBSDServiceValue);
+        }
+        #endregion
+    }
 }

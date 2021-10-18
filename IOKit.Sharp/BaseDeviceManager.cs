@@ -15,7 +15,6 @@ namespace IOKit.Sharp
 		public EventHandler<DeviceArgs> OnDeviceRemoved;
 		#endregion
 
-		// List of Devices that we aren't interested in being notified about
 		/* TODO 
          * Implement a Filter/predicate or similar, so that users can easily filter for specific devices.
          * Needs to be fairly effecient as we don't want a big performance hit
@@ -125,7 +124,7 @@ namespace IOKit.Sharp
 		}
 	}
 
-	public static class Helper
+	public static class HelperExtensions
 	{
 		/// <summary>
 		/// Filter a dictionary, using the given predicate.

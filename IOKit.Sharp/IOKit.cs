@@ -102,8 +102,10 @@ namespace IOKit
 		public const string kIOFirstMatchNotification = "IOServiceFirstMatch";
 		public const string kIOTerminatedNotification = "IOServiceTerminate";
 
+		public const string kUSBVendorID = "idVendor";
 		public const string kUSBVendorString = "kUSBVendorString";
 		public const string kUSBSerialNumberString = "kUSBSerialNumberString";
+		public const string kUSBProductID = "idProduct";
 		public const string kUSBProductString = "kUSBProductString";
 
 		// property of root that describes the machine's serial number as a string
@@ -152,7 +154,7 @@ namespace IOKit
 			string serial = string.Empty;
 			uint platformExpert = IOServiceGetMatchingService (0, IOServiceMatching ("IOPlatformExpertDevice"));
 			if (platformExpert != 0) {
-				serial = GetPropertyValue (platformExpert, kIOPlatformSerialNumberKey);
+				serial = GetPropertyStringValue (platformExpert, kIOPlatformSerialNumberKey);
 				IOObjectRelease (platformExpert);
 			}
 
@@ -172,7 +174,7 @@ namespace IOKit
 			return returnStr;
 		}
 
-		public static string GetPropertyValue (uint device, string propertyName)
+		public static string GetPropertyStringValue (uint device, string propertyName)
 		{
 			string returnStr = string.Empty;
 
@@ -183,6 +185,19 @@ namespace IOKit
 			}
 
 			return returnStr;
+		}
+
+		public static uint GetPropertyUIntValue (uint device, string propertyName)
+		{
+			uint returnValue = 0;
+
+			NSString key = (NSString)propertyName;
+			IntPtr propertyPointer = IORegistryEntryCreateCFProperty (device, key.Handle, IntPtr.Zero, 0);
+			if (propertyPointer != IntPtr.Zero) {
+				returnValue = (uint)propertyPointer; // TODO Convert this properly to the value at that address
+			}
+
+			return returnValue;
 		}
 		#endregion
 	}
