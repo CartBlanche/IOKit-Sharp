@@ -42,9 +42,9 @@ namespace IOKit.Sharp
         */
 
 		#region Device Callbacks, that MUST be implemented in derived classes
-		public abstract void DoDeviceAdded (IntPtr p, uint addedIterator);
+		protected abstract void DoDeviceAdded (IntPtr p, uint addedIterator);
 
-		public abstract void DoDeviceRemoved (IntPtr p, uint removedIterator);
+		protected abstract void DoDeviceRemoved (IntPtr p, uint removedIterator);
 		#endregion
 
 		public abstract void Start ();

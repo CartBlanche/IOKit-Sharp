@@ -8,7 +8,7 @@ namespace IOKit.Sharp
     public class USBDeviceManager : BaseDeviceManager
     {
         #region Device Callbacks
-        public override void DoDeviceAdded (IntPtr p, uint addedIterator)
+        protected override void DoDeviceAdded (IntPtr p, uint addedIterator)
         {
             uint usbDevice = IOKit.IOIteratorNext (addedIterator);
 
@@ -36,7 +36,7 @@ namespace IOKit.Sharp
             }
         }
 
-        public override void DoDeviceRemoved (IntPtr p, uint removedIterator)
+        protected override void DoDeviceRemoved (IntPtr p, uint removedIterator)
         {
             uint usbDevice = IOKit.IOIteratorNext (removedIterator);
 

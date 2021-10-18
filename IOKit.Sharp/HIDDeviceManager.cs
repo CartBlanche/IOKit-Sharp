@@ -8,13 +8,13 @@ namespace IOKit.Sharp
     public class HIDDeviceManager : BaseDeviceManager
     {
         #region Device Callbacks
-        public override void DoDeviceAdded (IntPtr p, uint addedIterator)
+        protected override void DoDeviceAdded (IntPtr p, uint addedIterator)
         {
             // TODO YOUR PR Here :)
             throw new NotImplementedException ();
         }
 
-        public override void DoDeviceRemoved (IntPtr p, uint removedIterator)
+        protected override void DoDeviceRemoved (IntPtr p, uint removedIterator)
         {
             // TODO YOUR PR Here :)
             throw new NotImplementedException ();
