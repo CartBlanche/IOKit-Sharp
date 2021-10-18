@@ -73,15 +73,14 @@ namespace IOKit.Sharp
 
         public override string ToString ()
         {
-            return base.ToString () + string.Format (
-                "VendorName:\t\t\t{0}" + Environment.NewLine +
-                "SerialNo:\t\t\t\t{1}" + Environment.NewLine +
-                "Port:\t\t\t{2}" + Environment.NewLine + // DialinDevice
-                "SerialBSDClientType:\t{3}" + Environment.NewLine +
-                "TTYBaseName:\t\t{4}" + Environment.NewLine +
-                "TTYDevice:\t\t\t{5}" + Environment.NewLine +
-                "TTYSuffix:\t\t\t{6}" + Environment.NewLine,
-                VendorName, SerialNo, Port, SerialBSDClientType, TTYBaseName, TTYDevice, TTYSuffix);
+            return base.ToString () + 
+                $"VendorName:\t\t\t{VendorName}" + Environment.NewLine +
+                $"SerialNo:\t\t\t\t{SerialNo}" + Environment.NewLine +
+                $"Port:\t\t\t\t{Port}" + Environment.NewLine + // DialinDevice
+                $"SerialBSDClientType:\t{SerialBSDClientType}" + Environment.NewLine +
+                $"TTYBaseName:\t\t{TTYBaseName}" + Environment.NewLine +
+                $"TTYDevice:\t\t\t{TTYDevice}" + Environment.NewLine +
+                $"TTYSuffix:\t\t\t{TTYSuffix}" + Environment.NewLine;
         }
 
         public override void Close ()
