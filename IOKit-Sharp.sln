@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.810.11
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOKitSample", "IOKitSample\IOKitSample.csproj", "{3229D7E7-F720-4E9E-B60E-B029F34EBAE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialSample", "IOKitSample\SerialSample.csproj", "{3229D7E7-F720-4E9E-B60E-B029F34EBAE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOKit.Sharp", "IOKit.Sharp\IOKit.Sharp.csproj", "{FD683D4C-AF58-4786-8E15-3B32A6A095F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F4B65D57-B590-4298-AD35-C0622568B4E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,11 +19,18 @@ Global
 		{3229D7E7-F720-4E9E-B60E-B029F34EBAE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3229D7E7-F720-4E9E-B60E-B029F34EBAE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3229D7E7-F720-4E9E-B60E-B029F34EBAE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD683D4C-AF58-4786-8E15-3B32A6A095F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD683D4C-AF58-4786-8E15-3B32A6A095F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD683D4C-AF58-4786-8E15-3B32A6A095F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD683D4C-AF58-4786-8E15-3B32A6A095F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B903DEB8-550D-43C2-BE58-191F29E1725B}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3229D7E7-F720-4E9E-B60E-B029F34EBAE3} = {F4B65D57-B590-4298-AD35-C0622568B4E6}
 	EndGlobalSection
 EndGlobal

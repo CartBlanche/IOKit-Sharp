@@ -1,0 +1,94 @@
+<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;</TargetFrameworks>
+    <AssemblyName>IOKit.Sharp</AssemblyName>
+    <RootNamespace>IOKit.Sharp</RootNamespace>
+    <PackageId>IOKit.Sharp</PackageId>
+    <PackageIcon>icon.png</PackageIcon>
+    <!-- <PackageIconUrl>https://raw.githubusercontent.com/xamarin/Essentials/master/Assets/xamarin.essentials_128x128.png</PackageIconUrl> -->
+    <Summary>IOKit.Sharp: a .NET Binding to Apple's IOKit framework</Summary>
+    <PackageTags>xamarin, windows, ios, toolkit,kit, iokit</PackageTags>
+    <Title>IOKit.Sharp</Title>
+    <Description>IOKit.Sharp: a .NET Binding to Apple's IOKit framework</Description>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
+    <Version>1.0.0</Version>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Microsoft</Authors>
+    <Owners>Dominique Louis</Owners>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Copyright>© Dominique Louis. All rights reserved.</Copyright>
+    <RepositoryUrl>https://github.com/CartBlanche/IOKit-Sharp</RepositoryUrl>
+    <PackageReleaseNotes>See: https://github.com/CartBlanche/IOKit-Sharp</PackageReleaseNotes>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/CartBlanche/IOKit-Sharp</PackageProjectUrl>
+    <MDocDocumentationDirectory>$(MSBuildThisFileDirectory)..\docs\en</MDocDocumentationDirectory>
+    <DebugType>portable</DebugType>
+    <Configurations>Debug;Release</Configurations>
+ </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
+    <!-- sourcelink: Declare that the Repository URL can be published to NuSpec -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- sourcelink: Embed source files that are not tracked by the source control manager to the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- sourcelink: Include PDB in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="System.IO.Ports" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE" PackagePath="" Pack="true" />
+    <Compile Include="**\*.shared.cs" />
+    <Compile Include="**\*.shared.*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <Compile Include="**\*.netstandard.cs" />
+    <Compile Include="**\*.netstandard.*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Compile Include="**\*.ios.cs" />
+    <Compile Include="**\*.ios.*.cs" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="OpenTK-1.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) ">
+    <Compile Include="**\*.macos.cs" />
+    <Compile Include="**\*.macos.*.cs" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    <Reference Include="OpenTK" />
+    <Compile Include="USBDeviceManager.cs" />
+    <Compile Include="HIDDeviceManager.cs" />
+    <Compile Include="BaseDevice.cs" />
+    <Compile Include="BaseDeviceManager.cs" />
+    <Compile Include="DeviceArgs.cs" />
+    <Compile Include="IOKit.cs" />
+    <Compile Include="SerialDevice.cs" />
+    <Compile Include="SerialDeviceManager.cs" />
+    <Compile Include="HIDDevice.cs" />
+    <Compile Include="USBDevice.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="5.0.1" />
+  </ItemGroup>
+</Project>

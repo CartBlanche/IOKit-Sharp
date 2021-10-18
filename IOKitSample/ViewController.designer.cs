@@ -15,7 +15,13 @@ namespace IOKit.IOKitSample
 		AppKit.NSTextField lblStatus { get; set; }
 
 		[Outlet]
-		AppKit.NSTextField lblDevices { get; set; }
+		AppKit.NSTextField lblDeviceCommands { get; set; }
+
+		[Outlet]
+		AppKit.NSComboBox cbxDevices { get; set; }
+
+		[Outlet]
+		AppKit.NSButton btnOpen { get; set; }
 
 
 		void ReleaseDesignerOutlets ()
@@ -25,9 +31,19 @@ namespace IOKit.IOKitSample
 				lblStatus = null;
 			}
 
-			if (lblDevices != null) {
-				lblDevices.Dispose ();
-				lblDevices = null;
+			if (lblDeviceCommands != null) {
+				lblDeviceCommands.Dispose ();
+				lblDeviceCommands = null;
+			}
+
+			if (cbxDevices != null) {
+				cbxDevices.Dispose ();
+				cbxDevices = null;
+			}
+
+			if (btnOpen != null) {
+				btnOpen.Dispose ();
+				btnOpen = null;
 			}
 		}
 	}
