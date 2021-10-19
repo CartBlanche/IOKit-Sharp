@@ -42,7 +42,7 @@ namespace IOKit.Sharp
                     };
 
                     // Add the device in. If it already exists it should just be replaced.
-                    deviceList[device.TTYDevice] = device;
+                    deviceList[device.Key] = device;
                     addedEvent (null, new DeviceArgs (device));
                 }
 
@@ -87,7 +87,7 @@ namespace IOKit.Sharp
                     };
 
                     // Remove the device from the list
-                    deviceList.Remove (device.TTYDevice);
+                    deviceList.Remove (device.Key);
                     removedEvent (null, new DeviceArgs (device));
                 }
 

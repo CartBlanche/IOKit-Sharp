@@ -21,8 +21,8 @@ namespace IOKit.IOKitSample
 
             // Do any additional setup after loading the view.
 
-
-            // TODO serialDeviceManager.Filter = (x => x.VendorID == 1155 && x.ProductID == 22336);
+            // Only listen out for our devices
+            serialDeviceManager.Filter = x => ((SerialDevice)x.Value).VendorName == "Wilderness Labs";
 
             // This way whenever out list changes the Combobox will automagically get updated.
             cbxDevices.UsesDataSource = true;
@@ -36,7 +36,7 @@ namespace IOKit.IOKitSample
                     cbxDevices.Enabled = !device.SerialPort.IsOpen;
 
                     if (device.SerialPort.IsOpen)
-                        lblDeviceCommands.StringValue = string.Format ("{0} Opened. Company: {1}, Product: {2}", device.Port, device.VendorName, device.ProductName);
+                        lblDeviceCommands.StringValue = $"{device.Key} Opened. Company: {device.VendorName}";
                     else
                         lblDeviceCommands.StringValue = string.Empty;
 

@@ -15,31 +15,17 @@ namespace IOKit.Sharp
 		public EventHandler<DeviceArgs> OnDeviceRemoved;
 		#endregion
 
-		/* TODO 
-         * Implement a Filter/predicate or similar, so that users can easily filter for specific devices.
-         * Needs to be fairly effecient as we don't want a big performance hit
-         * Maybe Func<BaseDevice, bool> Filter; So we can do a Where(Filter) if Filter is no null ??
-         * ie. Filter on a particular vendor id/name
-         * static string[] invalidDeviceList = {
-            "/dev/tty.Bluetooth-Incoming-Port",
-            "Meadow Bootloader",
-        }; */
-
-		// TODO public Func<string, BaseDevice> Filter = null;
+		public Predicate<KeyValuePair<string, BaseDevice>> Filter = null;
 
 		protected Dictionary<string, BaseDevice> deviceList = new Dictionary<string, BaseDevice> ();
-		public Dictionary<string, BaseDevice> DeviceList => deviceList;
-		/* TODO {
+		public Dictionary<string, BaseDevice> DeviceList {
             get {
-                if (Filter == null) {
-                    return deviceList;
-                }
-                else {
-                    return deviceList.Filter (Filter);
-                }
-            }
+				if (deviceList.Count > 0 && Filter != null)
+					return deviceList.Filter (Filter);
+				else
+					return deviceList;
+			}
         }
-        */
 
 		#region Device Callbacks, that MUST be implemented in derived classes
 		protected abstract void DoDeviceAdded (IntPtr p, uint addedIterator);
@@ -132,8 +118,10 @@ namespace IOKit.Sharp
 		public static Dictionary<Key, Value> Filter<Key, Value> (this Dictionary<Key, Value> dictionary,
 				Predicate<KeyValuePair<Key, Value>> predicate)
 		{
+			var filteredEnumerable = dictionary.Where (x => predicate (x));
+
 			// Note a new dictionary is created (some overhead)
-			return dictionary.Where (x => predicate (x)).ToDictionary (x => x.Key, x => x.Value);
+			return filteredEnumerable.ToDictionary (d => d.Key, d => d.Value);
 		}
 	}
 }

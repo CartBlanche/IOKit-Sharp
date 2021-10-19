@@ -71,6 +71,8 @@ namespace IOKit.Sharp
             set;
         }
 
+        public string Key => $"{ProductName} ({Port})";
+
         public override string ToString ()
         {
             return base.ToString () + 
