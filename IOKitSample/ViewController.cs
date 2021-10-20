@@ -24,10 +24,6 @@ namespace IOKit.IOKitSample
             // Only listen out for our devices
             serialDeviceManager.Filter = x => ((SerialDevice)x.Value).VendorName == "Wilderness Labs";
 
-            // This way whenever out list changes the Combobox will automagically get updated.
-            cbxDevices.UsesDataSource = true;
-            cbxDevices.DataSource = new DevicesDataSource (serialDeviceManager.DeviceList);
-
             btnOpen.Activated += (o, e) => {
                 if (cbxDevices.Count > 0 && cbxDevices.SelectedIndex > -1) {
                     var obj = cbxDevices.StringValue;
@@ -46,23 +42,37 @@ namespace IOKit.IOKitSample
 
             serialDeviceManager.OnDeviceAdded += (o, e) => {
                 MainThread.BeginInvokeOnMainThread (() => {
-                    lblStatus.StringValue = "Added " + Environment.NewLine + e.Device.ToString ();
+                    lblStatus.StringValue = $"Added \n {e.Device}";
 
                     btnOpen.Enabled = serialDeviceManager.DeviceList.Count > 0;
+
+                    UpdateComboBox ();
                 });
             };
 
             serialDeviceManager.OnDeviceRemoved += (o, e) => {
                 MainThread.BeginInvokeOnMainThread (() => {
-                    lblStatus.StringValue = "Removed " + Environment.NewLine + e.Device.ToString ();
+                    lblStatus.StringValue = $"Removed \n {e.Device}";
 
                     btnOpen.Enabled = serialDeviceManager.DeviceList.Count > 0;
+
+                    UpdateComboBox ();
                 });
             };
 
             var serial = Task.Run (() => {
                 serialDeviceManager.Start ();
             });
+        }
+
+        private void UpdateComboBox ()
+        {
+            // As the number of attached device will be a handful (who plugs in 20 devices at once?),
+            // clearing the comboboxlist each time shouldn't be too expensive.
+            cbxDevices.RemoveAll ();
+            foreach (var item in serialDeviceManager.DeviceList) {
+                cbxDevices.Add (FromObject (((SerialDevice)item.Value).Key));
+            }
         }
 
         public override NSObject RepresentedObject {

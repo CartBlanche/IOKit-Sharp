@@ -20,10 +20,10 @@ namespace IOKit.Sharp
 		protected Dictionary<string, BaseDevice> deviceList = new Dictionary<string, BaseDevice> ();
 		public Dictionary<string, BaseDevice> DeviceList {
             get {
+				Dictionary<string, BaseDevice> filteredDevices = deviceList;
 				if (deviceList.Count > 0 && Filter != null)
-					return deviceList.Filter (Filter);
-				else
-					return deviceList;
+					filteredDevices = deviceList.Filter (Filter);
+				return filteredDevices;
 			}
         }
 

@@ -42,7 +42,7 @@ namespace IOKit.Sharp
                     };
 
                     // Add the device in. If it already exists it should just be replaced.
-                    deviceList[device.Key] = device;
+                    deviceList[device.Port] = device;
                     addedEvent (null, new DeviceArgs (device));
                 }
 
@@ -87,7 +87,7 @@ namespace IOKit.Sharp
                     };
 
                     // Remove the device from the list
-                    deviceList.Remove (device.Key);
+                    deviceList.Remove (device.Port);
                     removedEvent (null, new DeviceArgs (device));
                 }
 
