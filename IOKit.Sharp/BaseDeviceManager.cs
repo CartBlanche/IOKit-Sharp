@@ -37,76 +37,71 @@ namespace IOKit.Sharp
 
 		protected void Start (string serviceMatchingName)
 		{
-			try {
-				int kr;
+			int kr;
 
-				var ioServiceMatching = IOKit.IOServiceMatching (serviceMatchingName);
-				NSMutableDictionary addingDeviceDictionary = ObjCRuntime.Runtime.GetNSObject<NSMutableDictionary> (ioServiceMatching);
-				/* TODO doesn't look like it's needed or doing any auto filtering on this hence the `invalidDeviceList`
-				 * addingDeviceDictionary["USBVendorID"] = new NSNumber (0x2E6A);
-				 * addingDeviceDictionary["USBProductID"] = new NSNumber (0x0001); */
-				NSMutableDictionary removingDeviceDictionary = new NSMutableDictionary (addingDeviceDictionary);
+			var ioServiceMatching = IOKit.IOServiceMatching (serviceMatchingName);
+			NSMutableDictionary addingDeviceDictionary = ObjCRuntime.Runtime.GetNSObject<NSMutableDictionary> (ioServiceMatching);
+			/* TODO doesn't look like it's needed or doing any auto filtering on this hence the `invalidDeviceList`
+			 * addingDeviceDictionary["USBVendorID"] = new NSNumber (0x2E6A);
+			 * addingDeviceDictionary["USBProductID"] = new NSNumber (0x0001); */
+			NSMutableDictionary removingDeviceDictionary = new NSMutableDictionary (addingDeviceDictionary);
 
-				//To set up asynchronous notifications, create a notification port and
-				//add its run loop event source to the program’s run loop
-				IntPtr gNotifyPort = IOKit.IONotificationPortCreate (0);
-				var dq = new DispatchQueue (serviceMatchingName + ".Detector");
-				IOKit.IONotificationPortSetDispatchQueue (gNotifyPort, dq.Handle);
+			//To set up asynchronous notifications, create a notification port and
+			//add its run loop event source to the program’s run loop
+			IntPtr gNotifyPort = IOKit.IONotificationPortCreate (0);
+			var dq = new DispatchQueue (serviceMatchingName + ".Detector");
+			IOKit.IONotificationPortSetDispatchQueue (gNotifyPort, dq.Handle);
 
-				IntPtr notificationRunLoopSource = IOKit.IONotificationPortGetRunLoopSource (gNotifyPort);
+			IntPtr notificationRunLoopSource = IOKit.IONotificationPortGetRunLoopSource (gNotifyPort);
 
-				var runLoopSource = new CFRunLoopSource (notificationRunLoopSource);
-				var runloop = NSRunLoop.Current;
-				var cfRunLoop = runloop.GetCFRunLoop ();
-				cfRunLoop.AddSource (runLoopSource, NSRunLoop.NSDefaultRunLoopMode);
+			var runLoopSource = new CFRunLoopSource (notificationRunLoopSource);
+			var runloop = NSRunLoop.Current;
+			var cfRunLoop = runloop.GetCFRunLoop ();
+			cfRunLoop.AddSource (runLoopSource, NSRunLoop.NSDefaultRunLoopMode);
 
-				//Now set up two notifications:
-				//one to be called when a device is first matched by the I/O Kit and another to be called when the
-				//device is terminated
-				//Notification of first match:
-				uint addedIterator = 0;
-				kr = IOKit.IOServiceAddMatchingNotification (
-					gNotifyPort,
-					IOKit.kIOFirstMatchNotification,
-					addingDeviceDictionary.Handle,
-					DoDeviceAdded,
-					IntPtr.Zero,
-					ref addedIterator);
+			//Now set up two notifications:
+			//one to be called when a device is first matched by the I/O Kit and another to be called when the
+			//device is terminated
+			//Notification of first match:
+			uint addedIterator = 0;
+			kr = IOKit.IOServiceAddMatchingNotification (
+				gNotifyPort,
+				IOKit.kIOFirstMatchNotification,
+				addingDeviceDictionary.Handle,
+				DoDeviceAdded,
+				IntPtr.Zero,
+				ref addedIterator);
 
-				//Iterate over set of matching devices to access already-present devices
-				//and to arm the notification
-				if (kr == IOKit.kIOReturnSuccess) {
-					DoDeviceAdded (IntPtr.Zero, addedIterator);
-				}
-				else {
-					Debug.WriteLine ("IOServiceAddMatchingNotification result for added devices: {0}", kr);
-				}
-
-				//Notification of termination:
-				uint removedIterator = 0;
-				kr = IOKit.IOServiceAddMatchingNotification (
-					gNotifyPort,
-					IOKit.kIOTerminatedNotification,
-					removingDeviceDictionary.Handle,
-					DoDeviceRemoved,
-					IntPtr.Zero,
-					ref removedIterator);
-
-				//Iterate over set of matching devices to release each one and to
-				//arm the notification
-				if (kr == IOKit.kIOReturnSuccess) {
-					DoDeviceRemoved (IntPtr.Zero, removedIterator);
-				}
-				else {
-					Debug.WriteLine ("IOServiceAddMatchingNotification result for removed devices:  {0}", kr);
-				}
-
-				//Start the run loop so notifications will be received
-				cfRunLoop.Run ();
+			//Iterate over set of matching devices to access already-present devices
+			//and to arm the notification
+			if (kr == IOKit.kIOReturnSuccess) {
+				DoDeviceAdded (IntPtr.Zero, addedIterator);
 			}
-			catch (Exception ex) {
-				Debug.WriteLine (ex.Message);
+			else {
+				throw new Exception ($"IOServiceAddMatchingNotification-IOKit.kIOFirstMatchNotification failed with error code {kr}");
 			}
+
+			//Notification of termination:
+			uint removedIterator = 0;
+			kr = IOKit.IOServiceAddMatchingNotification (
+				gNotifyPort,
+				IOKit.kIOTerminatedNotification,
+				removingDeviceDictionary.Handle,
+				DoDeviceRemoved,
+				IntPtr.Zero,
+				ref removedIterator);
+
+			//Iterate over set of matching devices to release each one and to
+			//arm the notification
+			if (kr == IOKit.kIOReturnSuccess) {
+				DoDeviceRemoved (IntPtr.Zero, removedIterator);
+			}
+			else {
+				throw new Exception ($"IOServiceAddMatchingNotification-kIOTerminatedNotification failed with error code {kr}");
+			}
+
+			//Start the run loop so notifications will be received
+			cfRunLoop.Run ();
 		}
 	}
 
