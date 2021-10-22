@@ -11,6 +11,7 @@ namespace IOKit.IOKitSample
     public partial class ViewController : NSViewController
     {
         SerialDeviceManager serialDeviceManager = new SerialDeviceManager ();
+        USBDeviceManager usbDeviceManager = new USBDeviceManager ();
         public ViewController (IntPtr handle) : base (handle)
         {
         }
@@ -25,11 +26,11 @@ namespace IOKit.IOKitSample
             serialDeviceManager.Filter = x => ((SerialDevice)x.Value).VendorName == "Wilderness Labs";
 
             btnOpen.Activated += (o, e) => {
-                if (cbxDevices.Count > 0 && cbxDevices.SelectedIndex > -1) {
-                    var obj = cbxDevices.StringValue;
+                if (cbxSerialDevices.Count > 0 && cbxSerialDevices.SelectedIndex > -1) {
+                    var obj = cbxSerialDevices.StringValue;
                     var device = serialDeviceManager.DeviceList[obj] as SerialDevice;
                     device.Open ();
-                    cbxDevices.Enabled = !device.SerialPort.IsOpen;
+                    cbxSerialDevices.Enabled = !device.SerialPort.IsOpen;
 
                     if (device.SerialPort.IsOpen)
                         lblDeviceCommands.StringValue = $"{device.Key} Opened. Company: {device.VendorName}";
@@ -42,36 +43,66 @@ namespace IOKit.IOKitSample
 
             serialDeviceManager.OnDeviceAdded += (o, e) => {
                 MainThread.BeginInvokeOnMainThread (() => {
-                    lblStatus.StringValue = $"Added \n {e.Device}";
+                    lblStatus.StringValue = $"Added Serial\n{e.Device}";
 
                     btnOpen.Enabled = serialDeviceManager.DeviceList.Count > 0;
 
-                    UpdateComboBox ();
+                    UpdateSerialComboBox ();
                 });
             };
 
             serialDeviceManager.OnDeviceRemoved += (o, e) => {
                 MainThread.BeginInvokeOnMainThread (() => {
-                    lblStatus.StringValue = $"Removed \n {e.Device}";
+                    lblStatus.StringValue = $"Removed Serial\n{e.Device}";
 
                     btnOpen.Enabled = serialDeviceManager.DeviceList.Count > 0;
 
-                    UpdateComboBox ();
+                    UpdateSerialComboBox ();
                 });
             };
 
             var serial = Task.Run (() => {
                 serialDeviceManager.Start ();
             });
+
+            usbDeviceManager.OnDeviceAdded += (o, e) => {
+                MainThread.BeginInvokeOnMainThread (() => {
+                    lblStatus.StringValue = $"Added USB\n {e.Device}";
+
+                    UpdateUSBComboBox ();
+                });
+            };
+
+            usbDeviceManager.OnDeviceRemoved += (o, e) => {
+                MainThread.BeginInvokeOnMainThread (() => {
+                    lblStatus.StringValue = $"Removed USB\n{e.Device}";
+
+                    UpdateUSBComboBox ();
+                });
+            };
+
+            var usb = Task.Run (() => {
+                usbDeviceManager.Start ();
+            });
         }
 
-        private void UpdateComboBox ()
+        private void UpdateSerialComboBox ()
         {
             // As the number of attached device will be a handful (who plugs in 20 devices at once?),
             // clearing the comboboxlist each time shouldn't be too expensive.
-            cbxDevices.RemoveAll ();
+            cbxSerialDevices.RemoveAll ();
             foreach (var item in serialDeviceManager.DeviceList) {
-                cbxDevices.Add (FromObject (((SerialDevice)item.Value).Key));
+                cbxSerialDevices.Add (FromObject (((SerialDevice)item.Value).Key));
+            }
+        }
+
+        private void UpdateUSBComboBox ()
+        {
+            // As the number of attached device will be a handful (who plugs in 20 devices at once?),
+            // clearing the comboboxlist each time shouldn't be too expensive.
+            cbxUSBDevices.RemoveAll ();
+            foreach (var item in usbDeviceManager.DeviceList) {
+                cbxUSBDevices.Add (FromObject (((USBDevice)item.Value).ProductName));
             }
         }
 

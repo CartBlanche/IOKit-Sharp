@@ -25,9 +25,9 @@ namespace IOKit.Sharp
 
         public override string ToString ()
         {
-            return $"VendorID:\t\t\t{VendorID} \n" +
-                $"ProductID:\t\t\t{ProductID} \n" +
-                $"ProductName:\t\t{ProductName} \n";
+            return $"VendorID:\t\t\t{VendorID}{Environment.NewLine}" +
+                $"ProductID:\t\t\t{ProductID}{Environment.NewLine}" +
+                $"ProductName:\t\t{ProductName}{Environment.NewLine}";
         }
 
         public abstract void Close ();

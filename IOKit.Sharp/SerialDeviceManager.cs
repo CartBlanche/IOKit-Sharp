@@ -60,6 +60,7 @@ namespace IOKit.Sharp
                 var dialinDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIODialinDeviceKey);
 
                 EventHandler<DeviceArgs> removedEvent = OnDeviceRemoved;
+
                 // Fire off the Remove event with the information we've gathered.
                 if (removedEvent != null) {
                     SerialDevice device = CreateSeriaDeviceFromProperties (usbDevice, vendor, product, serialNumber, vendorID, productID, dialinDevice);

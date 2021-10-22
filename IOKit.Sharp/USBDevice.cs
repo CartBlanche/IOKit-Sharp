@@ -6,15 +6,12 @@ namespace IOKit.Sharp
 {
     public class USBDevice : BaseDevice
     {
-
-        public string VendorName
-        {
+        public string VendorName {
             get;
             set;
         }
 
-        public string SerialNo
-        {
+        public string SerialNo {
             get;
             set;
         }
@@ -34,9 +31,9 @@ namespace IOKit.Sharp
             throw new NotImplementedException ();
         }
 
-        public override string ToString()
+        public override string ToString ()
         {
-            return base.ToString() +
+            return base.ToString () +
                 $"VendorName:\t\t\t{VendorName}{Environment.NewLine}" +
                 $"SerialNo:\t\t\t{SerialNo}{Environment.NewLine}";
         }

@@ -11,8 +11,8 @@ namespace IOKit
 		// This is based off of Chris Hamons' gist https://gist.github.com/chamons/82ab06f5e83d2cb10193 but with a bit more functionality
 
 		// Please add DllImport in alphabetical order
-		[DllImport(iOKitPath, CharSet = CharSet.Ansi)]
-		public static extern bool CFNumberGetValue(IntPtr number, CFNumberType theType, out IntPtr valuePtr);
+		[DllImport (iOKitPath, CharSet = CharSet.Ansi)]
+		public static extern bool CFNumberGetValue (IntPtr number, CFNumberType theType, out IntPtr valuePtr);
 		[DllImport (iOKitPath)]
 		public static extern IntPtr CFUUIDGetConstantUUIDWithBytes (IntPtr alloc, byte byte0, byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8, byte byte9, byte byte10, byte byte11, byte byte12, byte byte13, byte byte14, byte byte15);
 
@@ -213,35 +213,32 @@ namespace IOKit
 			return returnStr;
 		}
 
-        public static uint GetPropertyUIntValue(uint device, string propertyName)
-        {
-            uint returnValue = 0;
+		public static uint GetPropertyUIntValue (uint device, string propertyName)
+		{
+			uint returnValue = 0;
 
-            NSString key = (NSString)propertyName;
-            IntPtr propertyPointer = IORegistryEntryCreateCFProperty(device, key.Handle, IntPtr.Zero, 0);
-            if (propertyPointer != IntPtr.Zero)
-            {
-                var bsdValue = IntPtr.Zero;
-                var result = CFNumberGetValue(propertyPointer, CFNumberType.Int, out bsdValue);
+			NSString key = (NSString)propertyName;
+			IntPtr propertyPointer = IORegistryEntryCreateCFProperty (device, key.Handle, IntPtr.Zero, 0);
+			if (propertyPointer != IntPtr.Zero) {
+				var bsdValue = IntPtr.Zero;
+				var result = CFNumberGetValue (propertyPointer, CFNumberType.Int, out bsdValue);
 				if (result)
-					returnValue = (uint)bsdValue.ToInt32();
+					returnValue = (uint)bsdValue.ToInt32 ();
 			}
 
-            return returnValue;
-        }
+			return returnValue;
+		}
 
-		unsafe public static string GetDeviceName(uint device)
+		unsafe public static string GetDeviceName (uint device)
 		{
 			char[] deviceNameBuffer = new char[256];
 			string deviceName = string.Empty;
 
-			fixed (char* pChar = deviceNameBuffer)
-			{
-				IntPtr intPtr = new IntPtr((void*)pChar);
-				var result = IOKit.IORegistryEntryGetName(device, intPtr);
-				if (result == 0)
-				{
-					deviceName = Marshal.PtrToStringAuto(intPtr);
+			fixed (char* pChar = deviceNameBuffer) {
+				IntPtr intPtr = new IntPtr ((void*)pChar);
+				var result = IOKit.IORegistryEntryGetName (device, intPtr);
+				if (result == 0) {
+					deviceName = Marshal.PtrToStringAuto (intPtr);
 				}
 			}
 			return deviceName;
