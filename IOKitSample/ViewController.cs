@@ -27,8 +27,8 @@ namespace IOKit.IOKitSample
 
             btnOpen.Activated += (o, e) => {
                 if (cbxSerialDevices.Count > 0 && cbxSerialDevices.SelectedIndex > -1) {
-                    var obj = cbxSerialDevices.StringValue;
-                    var device = serialDeviceManager.DeviceList[obj] as SerialDevice;
+                    var currentlySelectedText = cbxSerialDevices.StringValue;
+                    var device = serialDeviceManager.DeviceList[currentlySelectedText] as SerialDevice;
                     device.Open ();
                     cbxSerialDevices.Enabled = !device.SerialPort.IsOpen;
 

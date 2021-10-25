@@ -31,7 +31,7 @@ namespace IOKit.Sharp
                     SerialDevice device = CreateSeriaDeviceFromProperties (usbDevice, vendor, product, serialNumber, vendorID, productID, dialinDevice);
 
                     // Add the device in. If it already exists it should just be replaced.
-                    deviceList[device.Port] = device;
+                    deviceList[device.Key] = device;
                     addedEvent (null, new DeviceArgs (device));
                 }
 
@@ -66,7 +66,7 @@ namespace IOKit.Sharp
                     SerialDevice device = CreateSeriaDeviceFromProperties (usbDevice, vendor, product, serialNumber, vendorID, productID, dialinDevice);
 
                     // Remove the device from the list
-                    deviceList.Remove (device.Port);
+                    deviceList.Remove (device.Key);
                     removedEvent (null, new DeviceArgs (device));
                 }
 
