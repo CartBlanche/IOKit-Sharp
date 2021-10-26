@@ -32,7 +32,7 @@ jobs:
       run: dotnet restore IOKit-Sharp.sln
 
     - name: Build
-      run: dotnet build --no-restore IOKit.Sharp/IOKit.Sharp.csproj
+      run: desktop msbuild --no-restore IOKit.Sharp/IOKit.Sharp.csproj
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
