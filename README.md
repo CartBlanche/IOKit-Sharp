@@ -1,7 +1,7 @@
 # IOKit-Sharp
 Build an IOKit Binding for MacOS .NET Applications
 
-[![Build](https://github.com/CartBlanche/IOKit-Sharp/workflows/CI/badge.svg?branch=main)](https://github.com/CartBlanche/IOKit-Sharp/actions)
+[![Build](https://github.com/CartBlanche/IOKit-Sharp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/CartBlanche/IOKit-Sharp/actions)
 [![Version](https://img.shields.io/nuget/v/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
 [![Downloads](https://img.shields.io/nuget/dt/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
 [![Sponsor Me](https://img.shields.io/badge/sponsor-$$$-purple.svg)](https://github.com/sponsors/CartBlanche)
