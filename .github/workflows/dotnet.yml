@@ -1,4 +1,4 @@
-name: .NET
+name: Build IOKit-Sharp
 
 on:
   push:
@@ -13,13 +13,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
+    - name: Set default Xamarin SDK versions
+      run: |
+        $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.12 --mac=7.14
+
+    - name: Set default Xcode 13.0
+      run: |
+        XCODE_ROOT=/Applications/Xcode_13.0.0.app
+        echo "MD_APPLE_SDK_ROOT=$XCODE_ROOT" >> $GITHUB_ENV
+        sudo xcode-select -s $XCODE_ROOT
+
+    - name: Setup .NET Core SDK 5.0.x
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore IOKit-Sharp.sln
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore IOKit.Sharp/IOKit.Sharp.csproj
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
