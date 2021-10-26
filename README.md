@@ -31,8 +31,6 @@ As the Xamarin.Mac developers think that IOKit is too niche, the primary aim is 
 
 ### Quick start
 
-![quick start animated](https://i.imgur.com/uouNh2u.gif)
-
 It is easy to get IOKit-Sharp to notify you when a device is plugged in or removed from within your MacOS application.
 
 ```csharp
