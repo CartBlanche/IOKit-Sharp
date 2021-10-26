@@ -8,7 +8,7 @@ namespace IOKit.Sharp
     public class SerialDeviceManager : BaseDeviceManager
     {
         #region Device Callbacks
-        public override void DoDeviceAdded (IntPtr p, uint addedIterator)
+        protected override void DoDeviceAdded (IntPtr p, uint addedIterator)
         {
             uint usbDevice = IOKit.IOIteratorNext (addedIterator);
 
@@ -28,21 +28,10 @@ namespace IOKit.Sharp
                 EventHandler<DeviceArgs> addedEvent = OnDeviceAdded;
                 // Fire off the Add event with the information we've gathered.
                 if (addedEvent != null) {
-                    var device = new SerialDevice {
-                        Port = dialinDevice,
-                        SerialBSDClientType = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOSerialBSDTypeKey),
-                        TTYBaseName = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYBaseNameKey),
-                        TTYDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYDeviceKey),
-                        TTYSuffix = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYSuffixKey),
-                        VendorName = vendor,
-                        ProductName = product,
-                        SerialNo = serialNumber,
-                        VendorID = vendorID,
-                        ProductID = productID,
-                    };
+                    SerialDevice device = CreateSeriaDeviceFromProperties (usbDevice, vendor, product, serialNumber, vendorID, productID, dialinDevice);
 
                     // Add the device in. If it already exists it should just be replaced.
-                    deviceList[device.TTYDevice] = device;
+                    deviceList[device.Key] = device;
                     addedEvent (null, new DeviceArgs (device));
                 }
 
@@ -53,7 +42,7 @@ namespace IOKit.Sharp
             };
         }
 
-        public override void DoDeviceRemoved (IntPtr p, uint removedIterator)
+        protected override void DoDeviceRemoved (IntPtr p, uint removedIterator)
         {
             uint usbDevice = IOKit.IOIteratorNext (removedIterator);
 
@@ -71,23 +60,13 @@ namespace IOKit.Sharp
                 var dialinDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIODialinDeviceKey);
 
                 EventHandler<DeviceArgs> removedEvent = OnDeviceRemoved;
+
                 // Fire off the Remove event with the information we've gathered.
                 if (removedEvent != null) {
-                    var device = new SerialDevice {
-                        Port = dialinDevice,
-                        SerialBSDClientType = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOSerialBSDTypeKey),
-                        TTYBaseName = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYBaseNameKey),
-                        TTYDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYDeviceKey),
-                        TTYSuffix = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYSuffixKey),
-                        VendorName = vendor,
-                        ProductName = product,
-                        SerialNo = serialNumber,
-                        VendorID = vendorID,
-                        ProductID = productID,
-                    };
+                    SerialDevice device = CreateSeriaDeviceFromProperties (usbDevice, vendor, product, serialNumber, vendorID, productID, dialinDevice);
 
                     // Remove the device from the list
-                    deviceList.Remove (device.TTYDevice);
+                    deviceList.Remove (device.Key);
                     removedEvent (null, new DeviceArgs (device));
                 }
 
@@ -140,6 +119,22 @@ namespace IOKit.Sharp
 
                 parents = parent;
             }
+        }
+
+        private static SerialDevice CreateSeriaDeviceFromProperties (uint usbDevice, string vendor, string product, string serialNumber, uint vendorID, uint productID, string dialinDevice)
+        {
+            return new SerialDevice {
+                Port = dialinDevice,
+                SerialBSDClientType = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOSerialBSDTypeKey),
+                TTYBaseName = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYBaseNameKey),
+                TTYDevice = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYDeviceKey),
+                TTYSuffix = IOKit.GetPropertyStringValue (usbDevice, IOKit.kIOTTYSuffixKey),
+                VendorName = vendor,
+                ProductName = product,
+                SerialNo = serialNumber,
+                VendorID = vendorID,
+                ProductID = productID,
+            };
         }
         #endregion
 

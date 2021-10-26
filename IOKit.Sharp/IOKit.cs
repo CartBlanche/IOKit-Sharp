@@ -11,6 +11,8 @@ namespace IOKit
 		// This is based off of Chris Hamons' gist https://gist.github.com/chamons/82ab06f5e83d2cb10193 but with a bit more functionality
 
 		// Please add DllImport in alphabetical order
+		[DllImport (iOKitPath, CharSet = CharSet.Ansi)]
+		public static extern bool CFNumberGetValue (IntPtr number, CFNumberType theType, out IntPtr valuePtr);
 		[DllImport (iOKitPath)]
 		public static extern IntPtr CFUUIDGetConstantUUIDWithBytes (IntPtr alloc, byte byte0, byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8, byte byte9, byte byte10, byte byte11, byte byte12, byte byte13, byte byte14, byte byte15);
 
@@ -43,7 +45,7 @@ namespace IOKit
 		public static extern IntPtr IORegistryEntryCreateCFProperty (uint device, IntPtr key, IntPtr allocator, uint options);
 
 		[DllImport (iOKitPath)]
-		public static extern int IORegistryEntryGetName (uint device, ref char name);
+		public static extern int IORegistryEntryGetName (uint device, IntPtr name);
 
 		[DllImport (iOKitPath)]
 		public static extern int IORegistryEntryGetParentEntry (uint device, string name, ref uint parent);
@@ -78,6 +80,30 @@ namespace IOKit
 
 		public const int kIOReturnSuccess = 0;
 
+
+		/// <summary>
+		/// CF number types
+		/// https://github.com/xamarin/mirepoix/blob/master/src/Xamarin.NativeHelpers/CoreFoundation.cs#L124
+		/// </summary>
+		public enum CFNumberType
+		{
+			SInt8 = 1,
+			SInt16 = 2,
+			SInt32 = 3,
+			SInt64 = 4,
+			Float32 = 5,
+			Float64 = 6,
+			Char = 7,
+			Short = 8,
+			Int = 9,
+			Long = 10,
+			LongLong = 11,
+			Float = 12,
+			Double = 13,
+			CFIndex = 14,
+			NSInteger = 15,
+			CGFloat = 16
+		}
 		#region From IOKitKeys.h
 		// IOKit Keys pulled from https://opensource.apple.com/source/xnu/xnu-792/iokit/IOKit/IOKitKeys.h.auto.html
 
@@ -194,10 +220,28 @@ namespace IOKit
 			NSString key = (NSString)propertyName;
 			IntPtr propertyPointer = IORegistryEntryCreateCFProperty (device, key.Handle, IntPtr.Zero, 0);
 			if (propertyPointer != IntPtr.Zero) {
-				returnValue = (uint)propertyPointer; // TODO Convert this properly to the value at that address
+				var bsdValue = IntPtr.Zero;
+				var result = CFNumberGetValue (propertyPointer, CFNumberType.Int, out bsdValue);
+				if (result)
+					returnValue = (uint)bsdValue.ToInt32 ();
 			}
 
 			return returnValue;
+		}
+
+		unsafe public static string GetDeviceName (uint device)
+		{
+			char[] deviceNameBuffer = new char[256];
+			string deviceName = string.Empty;
+
+			fixed (char* pChar = deviceNameBuffer) {
+				IntPtr intPtr = new IntPtr ((void*)pChar);
+				var result = IOKit.IORegistryEntryGetName (device, intPtr);
+				if (result == 0) {
+					deviceName = Marshal.PtrToStringAuto (intPtr);
+				}
+			}
+			return deviceName;
 		}
 		#endregion
 	}

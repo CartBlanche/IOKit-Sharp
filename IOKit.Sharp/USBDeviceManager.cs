@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
-using CoreFoundation;
-using Foundation;
 
 namespace IOKit.Sharp
 {
     public class USBDeviceManager : BaseDeviceManager
     {
         #region Device Callbacks
-        public override void DoDeviceAdded (IntPtr p, uint addedIterator)
+        protected override void DoDeviceAdded (IntPtr p, uint addedIterator)
         {
             uint usbDevice = IOKit.IOIteratorNext (addedIterator);
 
             while (usbDevice != 0) {
-                // TODO YOUR PR Here :)
-
                 EventHandler<DeviceArgs> addedEvent = OnDeviceAdded;
+
                 // Fire off the Add event with the information we've gathered.
                 if (addedEvent != null) {
-                    // TODO Populate our USB Device Correctly Here
-                    var device = new USBDevice {
-                        ProductName = "/*TODO */",
-                    };
+                    USBDevice device = CreateUSBDeviceFromProperties (usbDevice);
 
                     // Add the device in. If it already exists it should just be replaced.
                     deviceList[device.ProductName] = device;
@@ -31,28 +25,23 @@ namespace IOKit.Sharp
                 if (IOKit.IOObjectRelease (usbDevice) != IOKit.kIOReturnSuccess) {
                     Debug.WriteLine ("Unable to release device: {0} ", usbDevice);
                 }
-
                 usbDevice = IOKit.IOIteratorNext (addedIterator);
             }
         }
 
-        public override void DoDeviceRemoved (IntPtr p, uint removedIterator)
+        protected override void DoDeviceRemoved (IntPtr p, uint removedIterator)
         {
             uint usbDevice = IOKit.IOIteratorNext (removedIterator);
 
             while (usbDevice != 0) {
-                // TODO YOUR PR Here :)
-
                 EventHandler<DeviceArgs> removedEvent = OnDeviceRemoved;
+
                 // Fire off the Add event with the information we've gathered.
                 if (removedEvent != null) {
-                    // TODO Populate our USB Device Correctly Here
-                    var device = new USBDevice {
-                        ProductName = "/* TODO */",
-                    };
+                    USBDevice device = CreateUSBDeviceFromProperties (usbDevice);
 
-                    // Add the device in. If it already exists it should just be replaced.
-                    deviceList[device.ProductName] = device;
+                    // Remove the device from the list
+                    deviceList.Remove (device.ProductName);
                     removedEvent (null, new DeviceArgs (device));
                 }
 
@@ -61,6 +50,18 @@ namespace IOKit.Sharp
                 }
                 usbDevice = IOKit.IOIteratorNext (removedIterator);
             }
+        }
+
+        private static USBDevice CreateUSBDeviceFromProperties (uint usbDevice)
+        {
+            // Populate our USB Device Correctly Here
+            return new USBDevice {
+                ProductName = IOKit.GetDeviceName (usbDevice),
+                VendorID = IOKit.GetPropertyUIntValue (usbDevice, IOKit.kUSBVendorID),
+                ProductID = IOKit.GetPropertyUIntValue (usbDevice, IOKit.kUSBProductID),
+                VendorName = IOKit.GetPropertyStringValue (usbDevice, IOKit.kUSBVendorString),
+                SerialNo = IOKit.GetPropertyStringValue (usbDevice, IOKit.kUSBSerialNumberString)
+            };
         }
         #endregion
 
