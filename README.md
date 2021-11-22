@@ -25,7 +25,9 @@ As the Xamarin.Mac developers think that IOKit is too niche, the primary aim is 
 
 ## Screenshots
 
-[Incoming]
+<img width="585" alt="Screenshot 2021-11-22 at 18 40 56" src="https://user-images.githubusercontent.com/271363/142917485-9f14d48d-1488-4896-8c8d-48f69647b40c.png">
+
+<img width="585" alt="Screenshot 2021-11-22 at 18 40 37" src="https://user-images.githubusercontent.com/271363/142917532-ba596288-d9e0-499e-8be5-333e236d7fed.png">
 
 ## Usage
 
