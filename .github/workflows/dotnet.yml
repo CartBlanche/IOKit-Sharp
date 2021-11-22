@@ -37,11 +37,9 @@ jobs:
     - name: Build
       run: msbuild IOKit.Sharp/IOKit.Sharp.csproj /p:Configuration=Release
 
-# !!! Not yet ready !!!
-#    - name: Test
-#      run: dotnet test --no-build --verbosity normal
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
 
-# !!! Not yet ready !!!
-#    - name: Publish Nuget Package
-#      if: startsWith(github.ref, 'refs/heads/release')
-#      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
+    - name: Publish Nuget Package
+      if: startsWith(github.ref, 'refs/heads/release')
+      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}

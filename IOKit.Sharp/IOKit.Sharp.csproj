@@ -6,19 +6,19 @@
     <PackageId>IOKit.Sharp</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <!-- <PackageIconUrl>https://raw.githubusercontent.com/xamarin/Essentials/master/Assets/xamarin.essentials_128x128.png</PackageIconUrl> -->
-    <Summary>IOKit.Sharp: a .NET Binding to Apple's IOKit framework</Summary>
-    <PackageTags>xamarin, windows, ios, toolkit,kit, iokit</PackageTags>
+    <Summary>A .NET Binding library to Apple's IOKit framework.</Summary>
+    <PackageTags>xamarin, windows, mac, toolkit, iokit, ios, io</PackageTags>
     <Title>IOKit.Sharp</Title>
-    <Description>IOKit.Sharp: a .NET Binding to Apple's IOKit framework</Description>
+    <Description>A .NET Binding library to Apple's IOKit framework that helps you easily communicate with IO devices from your MacOS application.</Description>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
     <Version>1.0.0</Version>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Authors>Microsoft</Authors>
+    <PackageVersion>0.0.1</PackageVersion>
+    <Authors>Dominique Louis, Kenneth Pouncey</Authors>
     <Owners>Dominique Louis</Owners>
     <NeutralLanguage>en</NeutralLanguage>
-    <Copyright>© Dominique Louis. All rights reserved.</Copyright>
+    <Copyright>All rights reserved. Copyright Aldoma Solutions © 2021</Copyright>
     <RepositoryUrl>https://github.com/CartBlanche/IOKit-Sharp</RepositoryUrl>
     <PackageReleaseNotes>See: https://github.com/CartBlanche/IOKit-Sharp</PackageReleaseNotes>
     <DefineConstants>$(DefineConstants);</DefineConstants>
@@ -30,6 +30,8 @@
     <MDocDocumentationDirectory>$(MSBuildThisFileDirectory)..\docs\en</MDocDocumentationDirectory>
     <DebugType>portable</DebugType>
     <Configurations>Debug;Release</Configurations>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageLicenseUrl>https://github.com/CartBlanche/IOKit-Sharp/blob/main/LICENSE</PackageLicenseUrl>
  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
     <DebugSymbols>true</DebugSymbols>

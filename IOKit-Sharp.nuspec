@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <version>0.0.01-alpha</version>
-    <authors>Dominique Louis</authors>
+    <authors>Dominique Louis, Kenneth Pouncey</authors>
     <owners>Aldoma Solutions</owners>
     <licenseUrl>https://github.com/CartBlanche/IOKit-Sharp/blob/main/LICENSE</licenseUrl>
     <projectUrl>https://github.com/CartBlanche/IOKit-Sharp</projectUrl>
@@ -11,11 +11,8 @@
     <title>Aldoma Solutions IOKit-Sharp</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Easily communicate with IO devices from your MacOS application, using .NET</description>
-    <summary>Communicating with IO devices on MacOS can be a pain. This nuget contains the bindings to IOKit so should simplify getting up and running.
-    </summary>
-    <releaseNotes>
-Add support for Versioning the Mac Packages
-    </releaseNotes>
+    <summary>A .NET Binding library to Apple's IOKit framework.</summary>
+    <releaseNotes>Add support for Versioning the Mac Packages</releaseNotes>
     <copyright>Copyright Aldoma Solutions © 2021</copyright>
   </metadata>
   <files>
