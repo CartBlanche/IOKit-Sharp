@@ -1,20 +1,20 @@
 # IOKit-Sharp
 Build an IOKit Binding for MacOS .NET Applications
 
+## Build Status
 [![Build](https://github.com/CartBlanche/IOKit-Sharp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/CartBlanche/IOKit-Sharp/actions)
-[![Version](https://img.shields.io/nuget/v/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
-[![Downloads](https://img.shields.io/nuget/dt/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
-[![Sponsor Me](https://img.shields.io/badge/sponsor-$$$-purple.svg)](https://github.com/sponsors/CartBlanche)
 
-
-✅ **Project status: active**.
+## Project Status:
+✅ **Active**.
 
 IOKit-Sharp is a simple to use IOKit binding to (Surprise, surprise) [IOKit](https://developer.apple.com/documentation/iokit?language=objc).
 As the Xamarin.Mac developers think that IOKit is too niche, the primary aim is to, over time, provide an easy way for MacOS .NET developers to integrate IOKit support into their apps.
 
+## Nuget Status 
+[![Version](https://img.shields.io/nuget/v/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
+[![Downloads](https://img.shields.io/nuget/dt/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
 
-## Download
-
+## Nuget Download
 📦 [NuGet](https://nuget.org/packages/IOKit-Sharp): `dotnet add package IOKit-Sharp`
 
 ## Features
@@ -86,6 +86,9 @@ Just provide the appropriate Predicate via the `Filter` property.
         serialDeviceManager.Filter = x => ((SerialDevice)x.Value).VendorName == "Wilderness Labs";
 ```
 
+## Sponsoship
+[![Sponsor Me](https://img.shields.io/badge/sponsor-$$$-purple.svg)](https://github.com/sponsors/CartBlanche)
 
-# Want to help make this better?
+
+## Want to help make this better?
 Have a look at our [Issues](https://github.com/CartBlanche/IOKit-Sharp/issues) page and let us know what you would like to work on and contribute.
