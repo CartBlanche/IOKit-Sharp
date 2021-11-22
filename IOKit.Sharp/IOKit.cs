@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using CoreFoundation;
 using Foundation;
 
 namespace IOKit
@@ -194,7 +195,7 @@ namespace IOKit
 			NSString key = (NSString)propertyName;
 			IntPtr propertyPointer = IORegistryEntrySearchCFProperty (device, kIOServicePlane, key.Handle, IntPtr.Zero, kIORegistryIterateParents | kIORegistryIterateRecursively);
 			if (propertyPointer != IntPtr.Zero) {
-				returnStr = NSString.FromHandle (propertyPointer);
+				returnStr = CFString.FromHandle (propertyPointer);
 			}
 
 			return returnStr;
@@ -207,7 +208,7 @@ namespace IOKit
 			NSString key = (NSString)propertyName;
 			IntPtr propertyPointer = IORegistryEntryCreateCFProperty (device, key.Handle, IntPtr.Zero, 0);
 			if (propertyPointer != IntPtr.Zero) {
-				returnStr = NSString.FromHandle (propertyPointer);
+				returnStr = CFString.FromHandle (propertyPointer);
 			}
 
 			return returnStr;
