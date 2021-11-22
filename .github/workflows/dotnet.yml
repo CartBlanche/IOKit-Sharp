@@ -1,4 +1,4 @@
-name: Build IOKit-Sharp
+name: IOKit.Sharp
 
 on:
   push:
