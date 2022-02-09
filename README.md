@@ -11,8 +11,8 @@ IOKit-Sharp is a simple to use IOKit binding to (Surprise, surprise) [IOKit](htt
 As the Xamarin.Mac developers think that IOKit is too niche, the primary aim is to, over time, provide an easy way for MacOS .NET developers to integrate IOKit support into their apps.
 
 ## Nuget Status 
-[![Version](https://img.shields.io/nuget/v/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
-[![Downloads](https://img.shields.io/nuget/dt/IOKit-Sharp.svg)](https://nuget.org/packages/IOKit-Sharp)
+[![Version](https://img.shields.io/nuget/v/IOKit.Sharp.svg)](https://www.nuget.org/packages/IOKit.Sharp/)
+[![Downloads](https://img.shields.io/nuget/dt/IOKit.Sharp.svg)](https://www.nuget.org/packages/IOKit.Sharp/)
 
 ## Nuget Download
 📦 [NuGet](https://nuget.org/packages/IOKit-Sharp): `dotnet add package IOKit-Sharp`
