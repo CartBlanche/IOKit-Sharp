@@ -15,7 +15,7 @@ As the Xamarin.Mac developers think that IOKit is too niche, the primary aim is 
 [![Downloads](https://img.shields.io/nuget/dt/IOKit.Sharp.svg)](https://www.nuget.org/packages/IOKit.Sharp/)
 
 ## Nuget Download
-📦 [NuGet](https://nuget.org/packages/IOKit-Sharp): `dotnet add package IOKit-Sharp`
+📦 [NuGet](https://nuget.org/packages/IOKit.Sharp): `dotnet add package IOKit.Sharp`
 
 ## Features
 
